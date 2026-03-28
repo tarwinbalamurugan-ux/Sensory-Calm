@@ -1,0 +1,843 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="copyright" content="© 2026 Sensory Calm. All rights reserved.">
+<meta name="author" content="Sensory Calm">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Sensory Calm – My Safe Space</title>
+<link href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#eef1f8; --card:#ffffff; --primary:#6b8cda; --primary-soft:#dce6ff; --primary-dark:#4a6ab5;
+  --green:#5db894; --green-soft:#d2f0e5; --amber:#e09b4a; --amber-soft:#fdefd5;
+  --rose:#d97b90; --rose-soft:#fde0e6; --lav:#9b7ed4; --lav-soft:#ede4ff;
+  --text:#2a2d3e; --text-mid:#5a6080; --text-soft:#909ab8;
+  --shadow:0 4px 20px rgba(80,100,160,0.10); --shadow-btn:0 6px 0 rgba(0,0,0,0.12);
+  --radius:24px; --radius-sm:16px; --font:'Lexend','Segoe UI',Arial,sans-serif;
+}
+[data-theme="warm"]    { --bg:#faf3ec;--card:#fff;--primary:#d4835a;--primary-soft:#fde8d8;--primary-dark:#b0613a;--text:#321a0e; }
+[data-theme="forest"]  { --bg:#edf5ed;--card:#fff;--primary:#4a9e72;--primary-soft:#ceeadb;--primary-dark:#2e7a52;--text:#122412; }
+[data-theme="lavender"]{ --bg:#f0ecfb;--card:#fff;--primary:#8866cc;--primary-soft:#e4d8ff;--primary-dark:#5e44aa;--text:#1e1230; }
+[data-theme="night"]   { --bg:#181b2e;--card:#242740;--primary:#7b9cff;--primary-soft:#252a50;--primary-dark:#5a7de8;--text:#e8eaf6;--text-mid:#a0a8c8;--text-soft:#6870a0;--shadow:0 4px 20px rgba(0,0,0,0.3); }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{-webkit-tap-highlight-color:transparent;}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh;transition:background .5s,color .5s;overflow-x:hidden;padding-bottom:90px;}
+.screen{display:none;min-height:100vh;padding:24px 18px 32px;max-width:600px;margin:0 auto;animation:fadeUp .35s ease both;}
+.screen.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.topbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;}
+.topbar-logo{font-size:24px;font-weight:900;letter-spacing:-.5px;}
+.logo-dot{color:var(--primary);}
+.icon-btn{width:52px;height:52px;border-radius:50%;border:none;background:var(--card);box-shadow:var(--shadow);cursor:pointer;font-size:22px;display:flex;align-items:center;justify-content:center;transition:transform .15s;color:var(--text);}
+.icon-btn:active{transform:scale(.9);}
+.big-btn{display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;min-height:120px;border:none;border-radius:var(--radius);font-family:var(--font);font-size:20px;font-weight:800;cursor:pointer;text-align:center;line-height:1.25;padding:20px 16px;transition:transform .15s,box-shadow .15s;position:relative;overflow:hidden;}
+.big-btn:active{transform:translateY(5px);box-shadow:0 2px 0 rgba(0,0,0,.12)!important;}
+.big-btn .bi{font-size:48px;margin-bottom:8px;display:block;line-height:1;}
+.big-btn.blue  {background:var(--primary);color:#fff;box-shadow:var(--shadow-btn),var(--shadow);}
+.big-btn.green {background:var(--green);color:#fff;box-shadow:0 6px 0 #3d8a6a,var(--shadow);}
+.big-btn.amber {background:var(--amber);color:#fff;box-shadow:0 6px 0 #b07530,var(--shadow);}
+.big-btn.rose  {background:var(--rose);color:#fff;box-shadow:0 6px 0 #b05068,var(--shadow);}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px;}
+.grid1{display:grid;gap:14px;margin-bottom:14px;}
+.back-btn{display:inline-flex;align-items:center;gap:8px;background:var(--card);border:none;border-radius:50px;padding:12px 22px;font-family:var(--font);font-size:16px;font-weight:700;color:var(--text);cursor:pointer;box-shadow:var(--shadow);margin-bottom:22px;transition:transform .15s;}
+.back-btn:active{transform:scale(.95);}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px;margin-bottom:16px;}
+.sh{font-size:13px;font-weight:800;letter-spacing:.8px;text-transform:uppercase;color:var(--text-soft);margin-bottom:12px;padding-left:2px;}
+.greeting{text-align:center;margin-bottom:24px;}
+.g-name{font-size:30px;font-weight:900;}
+.g-sub{font-size:16px;color:var(--text-mid);margin-top:4px;font-weight:600;}
+.mood-strip{display:flex;gap:6px;justify-content:center;flex-wrap:wrap;}
+.mood-face{font-size:44px;cursor:pointer;border-radius:50%;padding:8px;border:3px solid transparent;transition:transform .2s,border-color .2s;line-height:1;}
+.mood-face:hover{transform:scale(1.2);}
+.mood-face.sel{border-color:var(--primary);background:var(--primary-soft);transform:scale(1.15);}
+#calm-canvas{width:100%;aspect-ratio:1;border-radius:var(--radius);background:#151828;display:block;cursor:crosshair;touch-action:none;margin-bottom:16px;}
+.chip-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:14px;}
+.chip{padding:10px 18px;border-radius:50px;border:2px solid var(--primary-soft);background:var(--card);font-family:var(--font);font-size:14px;font-weight:700;cursor:pointer;color:var(--text);transition:all .2s;}
+.chip.on,.chip:hover{background:var(--primary);color:#fff;border-color:var(--primary);}
+.snd-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:16px;}
+.snd-btn{aspect-ratio:1;border-radius:var(--radius-sm);border:none;background:var(--bg);font-size:12px;font-weight:800;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;transition:transform .15s,background .2s;box-shadow:var(--shadow);color:var(--text);font-family:var(--font);padding:8px;}
+.snd-btn .si{font-size:34px;line-height:1;}
+.snd-btn.on{background:var(--primary);color:#fff;transform:scale(1.04);}
+.snd-btn:active{transform:scale(.93);}
+.vol-row{display:flex;align-items:center;gap:12px;}
+.vol-row label{font-weight:700;font-size:14px;white-space:nowrap;}
+input[type=range]{flex:1;-webkit-appearance:none;height:14px;border-radius:20px;background:var(--primary-soft);outline:none;}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:30px;height:30px;border-radius:50%;background:var(--primary);cursor:pointer;box-shadow:0 2px 8px rgba(0,0,0,.15);}
+.brc{display:flex;flex-direction:column;align-items:center;padding:8px 0 16px;}
+#breath-ring{width:190px;height:190px;border-radius:50%;background:var(--primary-soft);border:5px solid var(--primary);display:flex;align-items:center;justify-content:center;font-size:52px;margin-bottom:24px;transition:transform 4s ease-in-out,background 3s,border-color 3s;}
+#breath-lbl{font-size:28px;font-weight:900;color:var(--primary);text-align:center;min-height:42px;}
+#breath-sub{font-size:16px;color:var(--text-mid);text-align:center;margin-top:6px;font-weight:600;}
+.btrack{width:100%;height:14px;background:var(--primary-soft);border-radius:20px;margin:18px 0;overflow:hidden;}
+.bfill{height:100%;background:var(--primary);border-radius:20px;width:0%;transition:width .5s linear;}
+.gl{display:flex;flex-direction:column;gap:10px;margin-bottom:14px;}
+.gr{display:flex;align-items:center;gap:14px;background:var(--card);border-radius:var(--radius-sm);padding:16px 18px;cursor:pointer;box-shadow:var(--shadow);border:2px solid transparent;transition:border-color .2s,background .2s;min-height:64px;}
+.gr.done{border-color:var(--green);background:var(--green-soft);}
+.gr:active{transform:scale(.97);}
+.gi{font-size:30px;flex-shrink:0;}.gt{font-size:17px;font-weight:700;flex:1;}.gc{font-size:24px;margin-left:auto;flex-shrink:0;}
+.pb{background:var(--amber-soft);border-radius:var(--radius);padding:24px;margin-bottom:16px;text-align:center;border:2px solid var(--amber);}
+.pb-icon{font-size:60px;margin-bottom:10px;}.pb-text{font-size:22px;font-weight:800;line-height:1.3;}.pb-sub{font-size:15px;color:var(--text-mid);margin-top:6px;font-weight:600;}
+.rcc{text-align:center;padding:16px;}
+.re{font-size:80px;margin-bottom:16px;display:block;}
+.rt{font-size:26px;font-weight:900;line-height:1.3;margin-bottom:8px;}
+.rs{font-size:16px;color:var(--text-mid);font-weight:600;}
+.rnext{display:block;width:100%;padding:20px;margin-top:20px;border-radius:var(--radius);border:none;font-family:var(--font);font-size:18px;font-weight:800;background:var(--green);color:#fff;cursor:pointer;box-shadow:0 6px 0 #3d8a6a;transition:transform .15s;}
+.rnext:active{transform:translateY(4px);box-shadow:0 2px 0 #3d8a6a;}
+.ni{width:100%;padding:16px 18px;border-radius:var(--radius-sm);border:2px solid var(--primary-soft);background:var(--bg);font-family:var(--font);font-size:18px;font-weight:700;color:var(--text);outline:none;margin-bottom:16px;transition:border-color .2s;display:block;}
+.ni:focus{border-color:var(--primary);}
+.avrow{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:14px;}
+.avp{font-size:42px;cursor:pointer;border-radius:50%;padding:8px;border:3px solid transparent;transition:transform .2s;line-height:1;}
+.avp.on{border-color:var(--primary);background:var(--primary-soft);transform:scale(1.15);}
+.swrow{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:6px;}
+.sw{width:36px;height:36px;border-radius:50%;cursor:pointer;border:3px solid transparent;transition:transform .2s;}
+.sw.on{border-color:var(--text);transform:scale(1.2);}
+.pref-row{display:flex;align-items:center;justify-content:space-between;padding:16px 0;border-bottom:2px solid var(--bg);}
+.pref-row:last-child{border-bottom:none;}
+.pl{font-size:16px;font-weight:700;}.ps{font-size:13px;color:var(--text-soft);margin-top:3px;font-weight:600;}
+.tog{width:58px;height:32px;background:var(--primary-soft);border-radius:20px;position:relative;cursor:pointer;transition:background .3s;flex-shrink:0;}
+.tog.on{background:var(--primary);}
+.tog::after{content:'';position:absolute;top:4px;left:4px;width:24px;height:24px;border-radius:50%;background:#fff;transition:left .3s;box-shadow:0 2px 6px rgba(0,0,0,.15);}
+.tog.on::after{left:30px;}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.stat-box{background:var(--card);border-radius:var(--radius-sm);padding:18px;box-shadow:var(--shadow);text-align:center;}
+.sn{font-size:38px;font-weight:900;color:var(--primary);}.sl{font-size:13px;font-weight:700;color:var(--text-soft);margin-top:2px;}
+.bc{display:flex;flex-direction:column;gap:10px;}
+.br{display:flex;align-items:center;gap:10px;}
+.bl{width:80px;font-size:12px;font-weight:800;text-align:right;flex-shrink:0;}
+.bt{flex:1;height:24px;background:var(--primary-soft);border-radius:20px;overflow:hidden;}
+.bf{height:100%;border-radius:20px;background:var(--primary);transition:width 1.2s ease;}
+.bv{width:32px;font-size:13px;font-weight:800;color:var(--text-soft);}
+.evlog{display:flex;flex-direction:column;gap:8px;}
+.evrow{display:flex;align-items:center;gap:10px;background:var(--card);border-radius:var(--radius-sm);padding:12px 16px;box-shadow:var(--shadow);}
+.evd{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.evd.calm{background:var(--green);}.evd.warning{background:var(--amber);}.evd.hard{background:var(--rose);}
+.evt{font-size:14px;font-weight:700;flex:1;}.evt2{font-size:12px;color:var(--text-soft);font-weight:600;}
+.export-btn{width:100%;padding:16px;border-radius:var(--radius-sm);border:2px dashed var(--primary);background:transparent;font-family:var(--font);font-size:16px;font-weight:800;color:var(--primary);cursor:pointer;margin-top:10px;transition:background .2s;}
+.export-btn:hover{background:var(--primary-soft);}
+.starrow{display:flex;gap:8px;justify-content:center;margin:14px 0;}
+.star{font-size:38px;cursor:pointer;transition:transform .2s;filter:grayscale(1) opacity(.4);}
+.star.on{filter:none;transform:scale(1.1);}
+.rec-wrap{display:none;margin-top:4px;}
+.bnav{position:fixed;bottom:0;left:0;right:0;background:var(--card);display:flex;justify-content:space-around;padding:8px 0 max(10px,env(safe-area-inset-bottom));box-shadow:0 -3px 20px rgba(0,0,0,.07);z-index:200;}
+.nb{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;padding:6px 16px;border-radius:14px;transition:background .2s;font-size:11px;font-weight:800;color:var(--text-soft);border:none;background:transparent;font-family:var(--font);min-width:64px;}
+.nb .nbi{font-size:26px;}.nb.on{color:var(--primary);background:var(--primary-soft);}
+#toast{position:fixed;bottom:96px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--text);color:var(--bg);padding:12px 24px;border-radius:50px;font-weight:800;font-size:16px;opacity:0;transition:opacity .3s,transform .3s;z-index:1000;white-space:nowrap;pointer-events:none;}
+#toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+#offpill{position:fixed;top:12px;right:12px;background:var(--amber);color:#fff;padding:6px 14px;border-radius:50px;font-size:12px;font-weight:800;display:none;z-index:999;}
+@media(min-width:480px){.big-btn{min-height:130px;font-size:21px;}.big-btn .bi{font-size:52px;}}
+</style>
+</head>
+<body>
+<div id="offpill">📵 No internet</div>
+<div id="toast"></div>
+
+<nav class="bnav" id="bnav" style="display:none">
+  <button class="nb on" id="nb-home"    onclick="goNav('home')">    <span class="nbi">🏠</span>Home</button>
+  <button class="nb"    id="nb-calm"    onclick="goNav('calm')">    <span class="nbi">🌊</span>Calm</button>
+  <button class="nb"    id="nb-breathe" onclick="goNav('breathe')"> <span class="nbi">🌬️</span>Breathe</button>
+  <button class="nb"    id="nb-dash"    onclick="goNav('dash')">    <span class="nbi">📊</span>Carer</button>
+</nav>
+
+<!-- WELCOME -->
+<div class="screen active" id="s-welcome">
+  <div style="text-align:center;padding-top:48px">
+    <div style="font-size:88px;line-height:1;margin-bottom:20px">☁️</div>
+    <div style="font-size:40px;font-weight:900;margin-bottom:8px">Sensory Calm</div>
+    <div style="font-size:18px;color:var(--text-mid);font-weight:600;margin-bottom:52px">Your safe, calm space 💙</div>
+    <button class="big-btn blue" onclick="show('s-setup')" style="max-width:320px;margin:0 auto 16px">
+      <span class="bi">✨</span>Let's get started!
+    </button>
+    <div style="font-size:15px;color:var(--text-soft);margin-top:20px;cursor:pointer;font-weight:700" onclick="carerLogin()">Caregiver login →</div>
+  </div>
+</div>
+
+<!-- SETUP -->
+<div class="screen" id="s-setup">
+  <div style="text-align:center;margin-bottom:28px"><div style="font-size:60px;margin-bottom:12px">👋</div><div style="font-size:28px;font-weight:900">What is your name?</div></div>
+  <div class="card">
+    <input class="ni" id="inp-name" type="text" placeholder="Type your name here…" maxlength="20" autocomplete="off" autocorrect="off" spellcheck="false">
+    <div class="sh">Pick your picture</div>
+    <div class="avrow">
+      <span class="avp on" data-av="🦄" onclick="pickAv(this)">🦄</span>
+      <span class="avp" data-av="🐶" onclick="pickAv(this)">🐶</span>
+      <span class="avp" data-av="🐱" onclick="pickAv(this)">🐱</span>
+      <span class="avp" data-av="🦁" onclick="pickAv(this)">🦁</span>
+      <span class="avp" data-av="🐸" onclick="pickAv(this)">🐸</span>
+      <span class="avp" data-av="🐙" onclick="pickAv(this)">🐙</span>
+      <span class="avp" data-av="🌟" onclick="pickAv(this)">🌟</span>
+      <span class="avp" data-av="🐉" onclick="pickAv(this)">🐉</span>
+    </div>
+    <div class="sh" style="margin-top:16px">Pick your colours</div>
+    <div class="swrow">
+      <div class="sw on" style="background:#6b8cda" data-t="default"   onclick="pickTheme(this)"></div>
+      <div class="sw"    style="background:#d4835a" data-t="warm"      onclick="pickTheme(this)"></div>
+      <div class="sw"    style="background:#4a9e72" data-t="forest"    onclick="pickTheme(this)"></div>
+      <div class="sw"    style="background:#8866cc" data-t="lavender"  onclick="pickTheme(this)"></div>
+      <div class="sw"    style="background:#2a2d3e" data-t="night"     onclick="pickTheme(this)"></div>
+    </div>
+    <div style="font-size:13px;color:var(--text-soft);margin-top:6px;font-weight:600">These are your app colours</div>
+  </div>
+  <div class="card">
+    <div class="sh">Caregiver preferences</div>
+    <div class="pref-row"><div><div class="pl">🔊 Sensitive to sounds</div><div class="ps">Sounds start quieter</div></div><div class="tog" id="t-snd" onclick="tog('snd')"></div></div>
+    <div class="pref-row"><div><div class="pl">💡 Sensitive to brightness</div><div class="ps">Softer visuals used</div></div><div class="tog" id="t-brt" onclick="tog('brt')"></div></div>
+    <div class="pref-row"><div><div class="pl">✋ Enjoys touching screen</div><div class="ps">Auto-spawns calming patterns</div></div><div class="tog" id="t-tch" onclick="tog('tch')"></div></div>
+  </div>
+  <button class="big-btn green" onclick="finishSetup()"><span class="bi">🚀</span>I'm ready!</button>
+</div>
+
+<!-- HOME -->
+<div class="screen" id="s-home">
+  <div class="topbar">
+    <div class="topbar-logo"><span id="h-av">🦄</span>Sensory Calm<span class="logo-dot">.</span></div>
+    <button class="icon-btn" onclick="show('s-settings')" aria-label="Settings">⚙️</button>
+  </div>
+  <div class="greeting">
+    <div class="g-name">Hi, <span id="h-name">friend</span>! 👋</div>
+    <div class="g-sub">How are you feeling right now?</div>
+  </div>
+  <div class="card" style="padding:18px 22px 22px">
+    <div class="sh" style="text-align:center;padding-left:0">Tap how you feel</div>
+    <div class="mood-strip">
+      <span class="mood-face" tabindex="0" title="Very happy" onclick="pickMood(this,5)">😄</span>
+      <span class="mood-face" tabindex="0" title="Happy"      onclick="pickMood(this,4)">🙂</span>
+      <span class="mood-face" tabindex="0" title="Okay"       onclick="pickMood(this,3)">😐</span>
+      <span class="mood-face" tabindex="0" title="Worried"    onclick="pickMood(this,2)">😟</span>
+      <span class="mood-face" tabindex="0" title="Very upset" onclick="pickMood(this,1)">😢</span>
+    </div>
+  </div>
+  <div class="sh" style="margin-top:6px">What do you need?</div>
+  <div class="grid2">
+    <button class="big-btn blue"  onclick="goNav('calm')">     <span class="bi">🌊</span>Calm me NOW</button>
+    <button class="big-btn green" onclick="goNav('breathe')">  <span class="bi">🌬️</span>Breathe</button>
+    <button class="big-btn amber" onclick="show('s-prevent')"> <span class="bi">🛡️</span>I feel wobbly</button>
+    <button class="big-btn rose"  onclick="show('s-recover')"> <span class="bi">🫂</span>After hard times</button>
+  </div>
+  <div class="rec-wrap" id="rec-wrap">
+    <div class="sh">⭐ What helps you most</div>
+    <div class="grid1" id="rec-list"></div>
+  </div>
+</div>
+
+<!-- CALM NOW -->
+<div class="screen" id="s-calm">
+  <button class="back-btn" onclick="goNav('home')">← Back</button>
+  <div style="font-size:24px;font-weight:900;text-align:center;margin-bottom:16px">🌊 Calm me NOW</div>
+  <div class="card" style="padding:16px">
+    <div class="sh">Touch the screen ✋</div>
+    <canvas id="calm-canvas" role="img" aria-label="Touch to make calming patterns"></canvas>
+    <div class="chip-row" id="pat-chips">
+      <div class="chip on" onclick="setPat('ripple',this)">🌊 Ripples</div>
+      <div class="chip"    onclick="setPat('stars',this)"> ⭐ Stars</div>
+      <div class="chip"    onclick="setPat('bubble',this)">🫧 Bubbles</div>
+      <div class="chip"    onclick="setPat('aurora',this)">🌌 Aurora</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="sh">🎵 Sounds</div>
+    <div class="snd-grid">
+      <button class="snd-btn" id="sb-rain"   onclick="playSound('rain',this)">  <span class="si">🌧️</span>Rain</button>
+      <button class="snd-btn" id="sb-ocean"  onclick="playSound('ocean',this)"> <span class="si">🌊</span>Ocean</button>
+      <button class="snd-btn" id="sb-forest" onclick="playSound('forest',this)"><span class="si">🌲</span>Forest</button>
+      <button class="snd-btn" id="sb-white"  onclick="playSound('white',this)"> <span class="si">⬜</span>White noise</button>
+      <button class="snd-btn" id="sb-hum"    onclick="playSound('hum',this)">   <span class="si">🎵</span>Soft hum</button>
+      <button class="snd-btn" id="sb-off"    onclick="playSound('off',this)">   <span class="si">🔇</span>Off</button>
+    </div>
+    <div class="vol-row">
+      <label>🔉 Volume</label>
+      <input type="range" min="0" max="100" value="45" id="vol" oninput="setVol(this.value)">
+    </div>
+  </div>
+  <button class="big-btn green" onclick="logCalm();toast('Well done! That was so calm 🌟')"><span class="bi">✅</span>That helped!</button>
+  <div class="sh" style="margin-top:12px;text-align:center">How helpful was that?</div>
+  <div class="starrow" id="calm-stars">
+    <span class="star" onclick="rate('calm',1,this)">⭐</span><span class="star" onclick="rate('calm',2,this)">⭐</span>
+    <span class="star" onclick="rate('calm',3,this)">⭐</span><span class="star" onclick="rate('calm',4,this)">⭐</span>
+    <span class="star" onclick="rate('calm',5,this)">⭐</span>
+  </div>
+</div>
+
+<!-- BREATHE -->
+<div class="screen" id="s-breathe">
+  <button class="back-btn" onclick="goNav('home')">← Back</button>
+  <div style="font-size:24px;font-weight:900;text-align:center;margin-bottom:4px">🌬️ Breathing</div>
+  <div style="font-size:15px;color:var(--text-mid);text-align:center;margin-bottom:20px;font-weight:600">Follow the circle</div>
+  <div class="card">
+    <div class="brc">
+      <div id="breath-ring">🌬️</div>
+      <div id="breath-lbl">Ready?</div>
+      <div id="breath-sub">Press start when you are ready</div>
+      <div class="btrack"><div class="bfill" id="bfill"></div></div>
+    </div>
+    <div class="chip-row" id="bp-chips">
+      <div class="chip on" onclick="setBP('478',this)">🧘 4-7-8</div>
+      <div class="chip"    onclick="setBP('box',this)">📦 Box</div>
+      <div class="chip"    onclick="setBP('easy',this)">🌸 Easy</div>
+    </div>
+  </div>
+  <button class="big-btn green" id="br-btn" onclick="startBreath()"><span class="bi">▶️</span>Start breathing</button>
+  <div class="sh" style="margin-top:12px;text-align:center">How helpful was that?</div>
+  <div class="starrow" id="br-stars">
+    <span class="star" onclick="rate('breathe',1,this)">⭐</span><span class="star" onclick="rate('breathe',2,this)">⭐</span>
+    <span class="star" onclick="rate('breathe',3,this)">⭐</span><span class="star" onclick="rate('breathe',4,this)">⭐</span>
+    <span class="star" onclick="rate('breathe',5,this)">⭐</span>
+  </div>
+</div>
+
+<!-- PREVENT -->
+<div class="screen" id="s-prevent">
+  <button class="back-btn" onclick="goNav('home')">← Back</button>
+  <div style="font-size:24px;font-weight:900;text-align:center;margin-bottom:16px">🛡️ I Feel Wobbly</div>
+  <div class="pb">
+    <div class="pb-icon">🧸</div>
+    <div class="pb-text">That is okay. Let's slow things down.</div>
+    <div class="pb-sub">You are safe. You are doing great.</div>
+  </div>
+  <div class="sh">Try these one at a time 👇</div>
+  <div class="gl">
+    <div class="gr" onclick="checkGround(this)"><span class="gi">👀</span><span class="gt">Find 5 things you can see</span><span class="gc">⬜</span></div>
+    <div class="gr" onclick="checkGround(this)"><span class="gi">🤲</span><span class="gt">Feel 4 things you can touch</span><span class="gc">⬜</span></div>
+    <div class="gr" onclick="checkGround(this)"><span class="gi">👂</span><span class="gt">Listen for 3 sounds</span><span class="gc">⬜</span></div>
+    <div class="gr" onclick="checkGround(this)"><span class="gi">👃</span><span class="gt">Smell 2 things</span><span class="gc">⬜</span></div>
+    <div class="gr" onclick="checkGround(this)"><span class="gi">👅</span><span class="gt">Taste 1 thing</span><span class="gc">⬜</span></div>
+  </div>
+  <button class="big-btn amber" onclick="logPrevent();toast('You did it! So proud of you 🌟');goNav('home');" style="margin-top:4px"><span class="bi">🌟</span>I feel better!</button>
+</div>
+
+<!-- RECOVER -->
+<div class="screen" id="s-recover">
+  <button class="back-btn" onclick="goNav('home')">← Back</button>
+  <div style="font-size:24px;font-weight:900;text-align:center;margin-bottom:16px">🫂 Rest and Recover</div>
+  <div class="card">
+    <div class="rcc" id="rs-0"><span class="re">🌧️</span><div class="rt">That was really hard.</div><div class="rs">It is okay. Hard moments always pass.</div></div>
+    <div class="rcc" id="rs-1" style="display:none"><span class="re">💙</span><div class="rt">You are safe now.</div><div class="rs">Take all the time you need.</div></div>
+    <div class="rcc" id="rs-2" style="display:none"><span class="re">🌱</span><div class="rt">Let's breathe very slowly.</div><div class="rs">In… and out… in… and out…</div></div>
+    <div class="rcc" id="rs-3" style="display:none"><span class="re">☀️</span><div class="rt">You got through it. You are brave.</div><div class="rs">Would you like a hug? 🤗</div></div>
+    <button class="rnext" id="rec-btn" onclick="nextRec()">I am ready for the next step →</button>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="screen" id="s-dash">
+  <div class="topbar"><div class="topbar-logo">📊 Caregiver</div><button class="icon-btn" onclick="goNav('home')" aria-label="Home">🏠</button></div>
+  <div style="font-size:13px;color:var(--text-soft);text-align:center;margin-bottom:18px;font-weight:600">Usage patterns and calming success</div>
+  <div class="sh">This week</div>
+  <div class="stat-grid">
+    <div class="stat-box"><div class="sn" id="st-sess">0</div><div class="sl">Sessions</div></div>
+    <div class="stat-box"><div class="sn" id="st-calm">0%</div><div class="sl">Calmed down</div></div>
+    <div class="stat-box"><div class="sn" id="st-str">0</div><div class="sl">Day streak 🔥</div></div>
+    <div class="stat-box"><div class="sn" id="st-fav" style="font-size:28px">—</div><div class="sl">Top tool</div></div>
+  </div>
+  <div class="sh">Most helpful tools</div>
+  <div class="card"><div class="bc" id="tool-chart"></div></div>
+  <div class="sh">Recent activity</div>
+  <div class="evlog" id="ev-log"><div class="evrow"><div class="evd calm"></div><div class="evt">No sessions yet</div></div></div>
+  <button class="export-btn" onclick="exportCSV()">📤 Export Report (CSV)</button>
+</div>
+
+<!-- SETTINGS -->
+<div class="screen" id="s-settings">
+  <button class="back-btn" onclick="goNav('home')">← Back</button>
+  <div style="font-size:24px;font-weight:900;margin-bottom:18px">⚙️ Settings</div>
+  <div class="card">
+    <div class="sh">Colours</div>
+    <div class="swrow">
+      <div class="sw" style="background:#6b8cda" data-t="default"   onclick="pickTheme(this)"></div>
+      <div class="sw" style="background:#d4835a" data-t="warm"      onclick="pickTheme(this)"></div>
+      <div class="sw" style="background:#4a9e72" data-t="forest"    onclick="pickTheme(this)"></div>
+      <div class="sw" style="background:#8866cc" data-t="lavender"  onclick="pickTheme(this)"></div>
+      <div class="sw" style="background:#2a2d3e" data-t="night"     onclick="pickTheme(this)"></div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="pref-row"><div><div class="pl">🔊 Sound sensitive</div></div><div class="tog" id="t-snd2" onclick="tog('snd')"></div></div>
+    <div class="pref-row"><div><div class="pl">💡 Brightness sensitive</div></div><div class="tog" id="t-brt2" onclick="tog('brt')"></div></div>
+    <div class="pref-row"><div><div class="pl">✋ Likes touching screen</div></div><div class="tog" id="t-tch2" onclick="tog('tch')"></div></div>
+  </div>
+  <button class="big-btn rose" onclick="resetApp()" style="font-size:16px;min-height:64px"><span class="bi" style="font-size:32px">🔄</span>Start over</button>
+</div>
+
+<script>
+"use strict";
+let S={name:'friend',avatar:'🦄',theme:'default',prefs:{snd:false,brt:false,tch:false},usage:{calm:0,breathe:0,prevent:0,recover:0},ratings:{calm:0,breathe:0},sessions:0,calmCount:0,streak:0,lastDate:null,events:[]};
+const save=()=>{try{localStorage.setItem('calmly3',JSON.stringify(S));}catch(e){}};
+const load=()=>{try{const d=localStorage.getItem('calmly3');if(d){S=Object.assign(S,JSON.parse(d));return true;}}catch(e){}return false;};
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active');window.scrollTo(0,0);}
+function goNav(sect){
+  const m={home:'s-home',calm:'s-calm',breathe:'s-breathe',dash:'s-dash'};
+  if(m[sect])show(m[sect]);
+  document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
+  const el=document.getElementById('nb-'+sect);if(el)el.classList.add('on');
+  if(sect==='calm')initCanvas();
+  if(sect==='breathe')resetBreath();
+  if(sect==='dash')refreshDash();
+}
+function pickAv(el){document.querySelectorAll('.avp').forEach(a=>a.classList.remove('on'));el.classList.add('on');S.avatar=el.dataset.av;}
+function pickTheme(el){document.querySelectorAll('.sw').forEach(s=>s.classList.remove('on'));el.classList.add('on');S.theme=el.dataset.t;document.documentElement.setAttribute('data-theme',S.theme==='default'?'':S.theme);save();}
+function tog(k){S.prefs[k]=!S.prefs[k];syncToggles();save();}
+function syncToggles(){['snd','brt','tch'].forEach(k=>{['t-'+k,'t-'+k+'2'].forEach(id=>{const el=document.getElementById(id);if(el)el.classList.toggle('on',S.prefs[k]);});});}
+function finishSetup(){const n=document.getElementById('inp-name').value.trim();S.name=n||'friend';document.getElementById('h-name').textContent=S.name;document.getElementById('h-av').textContent=S.avatar;checkStreak();S.sessions++;save();document.getElementById('bnav').style.display='flex';goNav('home');refreshRec();}
+function carerLogin(){if(load()&&S.name!=='friend'){applyTheme();syncToggles();document.getElementById('h-name').textContent=S.name;document.getElementById('h-av').textContent=S.avatar;document.getElementById('bnav').style.display='flex';goNav('dash');}else toast('No profile yet!');}
+function applyTheme(){document.documentElement.setAttribute('data-theme',S.theme==='default'?'':S.theme);}
+function pickMood(el,v){document.querySelectorAll('.mood-face').forEach(f=>f.classList.remove('sel'));el.classList.add('sel');addEvent(v>=4?'calm':v===3?'warning':'hard','Mood: '+['','😢','😟','😐','🙂','😄'][v]);if(v<=2){toast("Let's find something to help 💙");setTimeout(()=>show('s-prevent'),1100);}save();}
+function checkStreak(){const today=new Date().toDateString();if(S.lastDate===today)return;const y=new Date();y.setDate(y.getDate()-1);S.streak=S.lastDate===y.toDateString()?S.streak+1:1;S.lastDate=today;}
+
+/* ═══════════════════════════════════════════════════════════
+   AUDIO ENGINE  v3
+   ─────────────────────────────────────────────────────────
+   Key fixes vs previous version:
+   1. Single "session token" (currentSession) — every async
+      callback checks it before touching audio or scheduling
+      the next tick. stopAll() increments the token, which
+      instantly kills all pending callbacks with zero leakage.
+   2. A dedicated local output GainNode per sound, connected
+      to the master gain. All node gains are normalised to 1.0
+      so the master slider is the sole volume control.
+   3. Hum rebuilt with additive sine partials (not sawtooth)
+      + breath-noise layer + gentle portamento melody — much
+      warmer, not buzzy.
+   4. Smooth fade-in / fade-out on every sound switch.
+   ─────────────────────────────────────────────────────────
+═══════════════════════════════════════════════════════════ */
+let AC = null, MG = null;
+let currentSession = 0;        // incremented on every stopAll()
+let persistentNodes = [];      // stoppable nodes for current session
+let activeSound = null;
+
+function getAC() {
+  if (!AC) AC = new (window.AudioContext || window.webkitAudioContext)();
+  if (AC.state === 'suspended') AC.resume();
+  return AC;
+}
+
+function getMG() {
+  if (!MG) { MG = getAC().createGain(); MG.connect(getAC().destination); }
+  return MG;
+}
+
+// Fade master out, stop everything, fade back up
+function stopAll() {
+  currentSession++;                      // kills all pending async callbacks
+  const ac = getAC();
+  const mg = getMG();
+  mg.gain.setTargetAtTime(0, ac.currentTime, 0.08);
+  const snap = [...persistentNodes];
+  persistentNodes = [];
+  setTimeout(() => {
+    snap.forEach(n => { try { n.stop && n.stop(); n.disconnect && n.disconnect(); } catch(e){} });
+    mg.gain.setTargetAtTime(targetGain(), ac.currentTime, 0.05);
+  }, 300);
+}
+
+function targetGain() {
+  const v = parseInt(document.getElementById('vol')?.value ?? 45);
+  const base = S.prefs.snd ? 0.45 : 0.75;
+  return (v / 100) * base;
+}
+
+function setVol(v) {
+  try { getMG().gain.setTargetAtTime((v/100)*(S.prefs.snd?0.45:0.75), getAC().currentTime, 0.1); } catch(e){}
+}
+
+// Create a looping pink-ish noise buffer (pre-allocated once per type)
+const noiseBufs = {};
+function getNoiseBuf(ac, tag, dur) {
+  if (noiseBufs[tag]) return noiseBufs[tag];
+  const sr = ac.sampleRate;
+  const buf = ac.createBuffer(1, Math.floor(sr * dur), sr);
+  const d = buf.getChannelData(0);
+  // Pink noise via Paul Kellett's method
+  let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0;
+  for (let i=0; i<d.length; i++) {
+    const wh = Math.random()*2-1;
+    b0=.99886*b0 + wh*.0555179; b1=.99332*b1 + wh*.0750759;
+    b2=.96900*b2 + wh*.1538520; b3=.86650*b3 + wh*.3104856;
+    b4=.55000*b4 + wh*.5329522; b5=-.7616*b5 - wh*.0168980;
+    d[i] = (b0+b1+b2+b3+b4+b5+wh*.5362) * 0.11;
+  }
+  noiseBufs[tag] = buf;
+  return buf;
+}
+
+function makeLoopSrc(ac, buf) {
+  const s = ac.createBufferSource();
+  s.buffer = buf; s.loop = true;
+  // Randomise loop start so multiple instances don't phase-cancel
+  s.loopStart = Math.random() * buf.duration;
+  s.loopEnd   = buf.duration;
+  return s;
+}
+
+/* ── RAIN ─────────────────────────────────────────────── */
+function makeRain(ac, out, tok) {
+  const buf = getNoiseBuf(ac, 'noise4', 4);
+
+  // Layer A: mid rain hiss
+  const sA = makeLoopSrc(ac, buf);
+  const bpA = ac.createBiquadFilter(); bpA.type='bandpass'; bpA.frequency.value=1400; bpA.Q.value=0.6;
+  const gA = ac.createGain(); gA.gain.value = 0.42;
+  sA.connect(bpA); bpA.connect(gA); gA.connect(out); sA.start();
+
+  // Layer B: high sparkle (drops on leaves)
+  const sB = makeLoopSrc(ac, buf);
+  const hpB = ac.createBiquadFilter(); hpB.type='highpass'; hpB.frequency.value=3800;
+  const gB = ac.createGain(); gB.gain.value = 0.18;
+  sB.connect(hpB); hpB.connect(gB); gB.connect(out); sB.start();
+
+  // Layer C: low rumble
+  const sC = makeLoopSrc(ac, buf);
+  const lpC = ac.createBiquadFilter(); lpC.type='lowpass'; lpC.frequency.value=180;
+  const gC = ac.createGain(); gC.gain.value = 0.28;
+  sC.connect(lpC); lpC.connect(gC); gC.connect(out); sC.start();
+
+  // Rain swell LFO
+  const lfo = ac.createOscillator(); lfo.frequency.value = 0.07;
+  const lg  = ac.createGain();       lg.gain.value = 0.12;
+  lfo.connect(lg); lg.connect(gA.gain); lfo.start();
+
+  persistentNodes.push(sA, sB, sC, lfo);
+
+  // Individual drop ticks — self-scheduling, uses token guard
+  function scheduleDrop() {
+    if (currentSession !== tok) return;
+    const t = ac.currentTime;
+    const dur = 0.018 + Math.random()*0.012;
+    const db = ac.createBuffer(1, Math.floor(ac.sampleRate*dur), ac.sampleRate);
+    const dd = db.getChannelData(0);
+    for (let i=0; i<dd.length; i++) dd[i] = (Math.random()*2-1) * Math.exp(-i/(dd.length*0.1));
+    const ds = ac.createBufferSource(); ds.buffer = db;
+    const dg = ac.createGain(); dg.gain.value = 0.08 + Math.random()*0.14;
+    ds.connect(dg); dg.connect(out); ds.start(t);
+    ds.stop(t + dur + 0.01);
+    setTimeout(scheduleDrop, 50 + Math.random()*220);
+  }
+  scheduleDrop();
+}
+
+/* ── OCEAN ────────────────────────────────────────────── */
+function makeOcean(ac, out, tok) {
+  const buf = getNoiseBuf(ac, 'noise4', 4);
+
+  // Two wave layers with offset LFOs
+  [[0.11, 0.32, 550, 0.5], [0.09, 0.20, 380, 0.6]].forEach(([lfoHz, wgV, freq, Q]) => {
+    const s = makeLoopSrc(ac, buf);
+    const bp = ac.createBiquadFilter(); bp.type='bandpass'; bp.frequency.value=freq; bp.Q.value=Q;
+    const g = ac.createGain(); g.gain.value = 0.38;
+    s.connect(bp); bp.connect(g); g.connect(out); s.start();
+
+    const wlfo = ac.createOscillator(); wlfo.type='sine'; wlfo.frequency.value=lfoHz;
+    const wg   = ac.createGain(); wg.gain.value = wgV;
+    wlfo.connect(wg); wg.connect(g.gain); wlfo.start();
+    persistentNodes.push(s, wlfo);
+  });
+
+  // Very low sub-surf rumble
+  const sR = makeLoopSrc(ac, buf);
+  const lpR = ac.createBiquadFilter(); lpR.type='lowpass'; lpR.frequency.value=90;
+  const gR  = ac.createGain(); gR.gain.value = 0.20;
+  sR.connect(lpR); lpR.connect(gR); gR.connect(out); sR.start();
+  persistentNodes.push(sR);
+}
+
+/* ── FOREST ───────────────────────────────────────────── */
+function makeForest(ac, out, tok) {
+  const buf = getNoiseBuf(ac, 'noise4', 4);
+
+  // Wind
+  const sW = makeLoopSrc(ac, buf);
+  const bpW = ac.createBiquadFilter(); bpW.type='bandpass'; bpW.frequency.value=650; bpW.Q.value=0.45;
+  const gW  = ac.createGain(); gW.gain.value = 0.20;
+  sW.connect(bpW); bpW.connect(gW); gW.connect(out); sW.start();
+  const wlfo = ac.createOscillator(); wlfo.frequency.value=0.06;
+  const wlg  = ac.createGain(); wlg.gain.value=0.10;
+  wlfo.connect(wlg); wlg.connect(gW.gain); wlfo.start();
+
+  // Leaves rustle (high-freq)
+  const sL = makeLoopSrc(ac, buf);
+  const hpL = ac.createBiquadFilter(); hpL.type='highpass'; hpL.frequency.value=3200;
+  const gL  = ac.createGain(); gL.gain.value = 0.09;
+  sL.connect(hpL); hpL.connect(gL); gL.connect(out); sL.start();
+
+  persistentNodes.push(sW, wlfo, sL);
+
+  // Bird chirps — token-guarded, self-scheduling
+  function scheduleChirp() {
+    if (currentSession !== tok) return;
+    const t = ac.currentTime;
+    const n = 2 + Math.floor(Math.random()*3);
+    const base = 1700 + Math.random()*1200;
+    for (let i=0; i<n; i++) {
+      const noteT = t + i*0.11 + Math.random()*0.02;
+      const freq  = base * (1 + i*0.16*(Math.random()>.5?1:-1));
+      const dur   = 0.10 + Math.random()*0.06;
+
+      // FM chirp: carrier + modulator for realistic tone
+      const mod  = ac.createOscillator(); mod.type='sine';  mod.frequency.value=freq*2.1;
+      const modg = ac.createGain();       modg.gain.value = freq*1.8;
+      mod.connect(modg);
+
+      const car  = ac.createOscillator(); car.type='sine';  car.frequency.value=freq;
+      modg.connect(car.frequency);
+
+      car.frequency.setValueAtTime(freq,      noteT);
+      car.frequency.linearRampToValueAtTime(freq*1.35, noteT+dur*0.4);
+      car.frequency.exponentialRampToValueAtTime(freq, noteT+dur);
+
+      const eg = ac.createGain();
+      eg.gain.setValueAtTime(0, noteT);
+      eg.gain.linearRampToValueAtTime(0.06+Math.random()*0.06, noteT+dur*0.2);
+      eg.gain.exponentialRampToValueAtTime(0.001, noteT+dur);
+
+      car.connect(eg); eg.connect(out);
+      mod.start(noteT); car.start(noteT);
+      mod.stop(noteT+dur+0.01); car.stop(noteT+dur+0.01);
+    }
+    setTimeout(scheduleChirp, 1200 + Math.random()*3800);
+  }
+  scheduleChirp();
+}
+
+/* ── WHITE NOISE ──────────────────────────────────────── */
+function makeWhite(ac, out, tok) {
+  const buf = getNoiseBuf(ac, 'noise4', 4);
+  const s   = makeLoopSrc(ac, buf);
+  const lp  = ac.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=1100;
+  const g   = ac.createGain(); g.gain.value = 0.55;
+  s.connect(lp); lp.connect(g); g.connect(out); s.start();
+  persistentNodes.push(s);
+}
+
+/* ── HUM (woman humming) ──────────────────────────────────
+   Additive sine synthesis — no sawtooth buzz.
+   8 partials with natural vocal roll-off.
+   Breath-noise layer for airiness.
+   Portamento melody on a lullaby scale.
+   Slow vibrato (5 Hz) on fundamental only.
+─────────────────────────────────────────────────────────── */
+function makeHum(ac, out, tok) {
+  const fundamental = 245; // Approx female alto/mezzo hum pitch
+
+  // Gain for the whole voice
+  const voiceGain = ac.createGain(); voiceGain.gain.value = 0.70;
+  voiceGain.connect(out);
+
+  // Vibrato LFO — modulates fundamental only
+  const vibLFO  = ac.createOscillator(); vibLFO.frequency.value  = 5.2;
+  const vibGain = ac.createGain();       vibGain.gain.value = 4.5;
+  vibLFO.connect(vibGain); vibLFO.start();
+
+  // Additive partials: [harmonic, relative amplitude]
+  // Shaped to match a closed-mouth "mmm" vowel formant envelope
+  const partials = [
+    [1, 0.55],   // fundamental — loudest
+    [2, 0.32],   // 2nd harmonic
+    [3, 0.18],   // 3rd
+    [4, 0.12],
+    [5, 0.09],
+    [6, 0.06],
+    [7, 0.04],
+    [8, 0.02],
+  ];
+
+  // Formant bandpass filters (nasal "mmm" resonances)
+  // F1≈280Hz  F2≈2200Hz  nasal≈1000Hz
+  const filt1 = ac.createBiquadFilter(); filt1.type='peaking'; filt1.frequency.value=280;  filt1.Q.value=6;  filt1.gain.value=7;
+  const filt2 = ac.createBiquadFilter(); filt2.type='peaking'; filt2.frequency.value=1000; filt2.Q.value=8;  filt2.gain.value=5;
+  const filt3 = ac.createBiquadFilter(); filt3.type='peaking'; filt3.frequency.value=2200; filt3.Q.value=10; filt3.gain.value=3;
+  const lpFin = ac.createBiquadFilter(); lpFin.type='lowpass'; lpFin.frequency.value=4000;
+
+  // Connect filter chain
+  const filtIn = ac.createGain(); filtIn.gain.value=1;
+  filtIn.connect(filt1); filt1.connect(filt2); filt2.connect(filt3); filt3.connect(lpFin); lpFin.connect(voiceGain);
+
+  const oscs = [];
+  partials.forEach(([h, amp]) => {
+    const osc  = ac.createOscillator(); osc.type='sine';
+    osc.frequency.value = fundamental * h;
+    const g = ac.createGain(); g.gain.value = amp;
+    // Only apply vibrato to fundamental
+    if (h === 1) vibGain.connect(osc.frequency);
+    osc.connect(g); g.connect(filtIn);
+    osc.start();
+    oscs.push(osc);
+    persistentNodes.push(osc);
+  });
+  persistentNodes.push(vibLFO, filtIn);
+
+  // Breath noise — adds airiness like real vocal sound
+  const breathBuf = getNoiseBuf(ac, 'noise4', 4);
+  const bSrc = makeLoopSrc(ac, breathBuf);
+  const bHP  = ac.createBiquadFilter(); bHP.type='highpass'; bHP.frequency.value=1800;
+  const bLP  = ac.createBiquadFilter(); bLP.type='lowpass';  bLP.frequency.value=5000;
+  const bG   = ac.createGain(); bG.gain.value = 0.022; // subtle — just airiness
+  bSrc.connect(bHP); bHP.connect(bLP); bLP.connect(bG); bG.connect(voiceGain); bSrc.start();
+  persistentNodes.push(bSrc);
+
+  // Slow breathing amplitude envelope — chest-breath pace ~0.18Hz
+  const breathLFO  = ac.createOscillator(); breathLFO.frequency.value  = 0.18;
+  const breathGain = ac.createGain();       breathGain.gain.value = 0.06;
+  breathLFO.connect(breathGain); breathGain.connect(voiceGain.gain); breathLFO.start();
+  persistentNodes.push(breathLFO);
+
+  // Lullaby melody: gentle pentatonic phrase, slow portamento
+  // C4(261) D4(294) E4(329) G4(392) A4(440) G4 E4 D4  (repeat)
+  const melody = [261, 294, 329, 392, 440, 392, 329, 294];
+  let step = 0;
+  function nextNote() {
+    if (currentSession !== tok) return;
+    const target = melody[step % melody.length] * (fundamental / 261);
+    // Portamento: smooth frequency slide on all oscs
+    oscs.forEach((o, i) => {
+      o.frequency.setTargetAtTime(target * partials[i][0], ac.currentTime, 0.55);
+    });
+    step++;
+    setTimeout(nextNote, 1600 + Math.random()*600);
+  }
+  nextNote();
+}
+
+/* ── PLAYBACK CONTROLLER ──────────────────────────────── */
+function playSound(type, btn) {
+  document.querySelectorAll('.snd-btn').forEach(b=>b.classList.remove('on'));
+
+  // Toggle off if same sound clicked again
+  if (activeSound === type && type !== 'off') {
+    stopAll(); activeSound = null; return;
+  }
+
+  stopAll();
+  activeSound = type;
+  if (type === 'off') return;
+
+  btn.classList.add('on');
+
+  // Delay slightly so stopAll's fade-out finishes first
+  const tok = currentSession; // capture token AFTER stopAll incremented it
+  setTimeout(() => {
+    if (currentSession !== tok) return; // another change happened
+    const ac  = getAC();
+
+    // Per-sound output gain (normalised) → master
+    const out = ac.createGain(); out.gain.value = 1.0;
+    out.connect(getMG());
+
+    // Apply current volume
+    getMG().gain.setTargetAtTime(targetGain(), ac.currentTime, 0.15);
+
+    if      (type === 'rain')   makeRain(ac, out, tok);
+    else if (type === 'ocean')  makeOcean(ac, out, tok);
+    else if (type === 'forest') makeForest(ac, out, tok);
+    else if (type === 'white')  makeWhite(ac, out, tok);
+    else if (type === 'hum')    makeHum(ac, out, tok);
+  }, 320);
+}
+
+/* ═══ CANVAS ═══ */
+let canvas,ctx,rafId,pat='ripple',parts=[];
+let autoSpawnInterval=null;
+function initCanvas(){
+  canvas=document.getElementById('calm-canvas');if(!canvas)return;
+  const w=Math.min((canvas.parentElement?.offsetWidth||340)-32,560);
+  canvas.width=w;canvas.height=w;
+  ctx=canvas.getContext('2d');
+  cancelAnimationFrame(rafId);parts=[];clearInterval(autoSpawnInterval);
+  ctx.fillStyle='#151828';ctx.fillRect(0,0,w,w);
+  if(pat==='aurora')runAurora();else runCanvas();
+  const spawnAt=(x,y)=>parts.push({x,y,r:3,max:60+Math.random()*80,col:['#6b8cda','#9b7ed4','#5db894','#e09b4a','#d97b90'][Math.floor(Math.random()*5)],a:1,t:pat});
+  canvas.addEventListener('touchstart',e=>{const r=canvas.getBoundingClientRect();Array.from(e.touches).forEach(t=>spawnAt(t.clientX-r.left,t.clientY-r.top));},{passive:true});
+  canvas.addEventListener('mousedown',e=>{const r=canvas.getBoundingClientRect();spawnAt(e.clientX-r.left,e.clientY-r.top);});
+  if(S.prefs.tch) autoSpawnInterval=setInterval(()=>{if(parts.length<5)spawnAt(Math.random()*canvas.width,Math.random()*canvas.height);},1000);
+}
+function runCanvas(){
+  ctx.fillStyle='rgba(21,24,40,0.14)';ctx.fillRect(0,0,canvas.width,canvas.height);
+  if(parts.length<2&&Math.random()<0.02)parts.push({x:Math.random()*canvas.width,y:Math.random()*canvas.height,r:3,max:70,col:'#6b8cda',a:1,t:pat});
+  parts=parts.filter(p=>{
+    if(p.t==='ripple'){ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.strokeStyle=p.col;ctx.globalAlpha=p.a*0.6;ctx.lineWidth=2.5;ctx.stroke();p.r+=2;p.a-=0.022;}
+    else if(p.t==='stars'){ctx.save();ctx.translate(p.x,p.y);ctx.globalAlpha=p.a;ctx.fillStyle=p.col;star5(ctx,0,0,p.r*0.38);ctx.restore();p.r+=1.4;p.a-=0.02;}
+    else if(p.t==='bubble'){ctx.beginPath();ctx.arc(p.x,p.y,p.r*0.45,0,Math.PI*2);ctx.fillStyle=p.col;ctx.globalAlpha=p.a*0.16;ctx.fill();ctx.strokeStyle=p.col;ctx.globalAlpha=p.a*0.5;ctx.lineWidth=1.8;ctx.stroke();p.y-=1.2;p.r+=0.9;p.a-=0.018;}
+    ctx.globalAlpha=1;return p.a>0&&p.r<p.max;
+  });
+  rafId=requestAnimationFrame(runCanvas);
+}
+function star5(c,cx,cy,r){const sp=Math.PI/5;c.beginPath();for(let i=0;i<10;i++){const rad=i%2===0?r:r*0.42;const a=i*sp-Math.PI/2;i===0?c.moveTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a)):c.lineTo(cx+rad*Math.cos(a),cy+rad*Math.sin(a));}c.closePath();c.fill();}
+let aT=0;
+function runAurora(){aT+=0.006;ctx.fillStyle='rgba(20,22,48,0.055)';ctx.fillRect(0,0,canvas.width,canvas.height);for(let i=0;i<4;i++){const hue=(200+i*55+aT*16)%360;const y=canvas.height*0.35+Math.sin(aT+i*1.3)*canvas.height*0.18;const grd=ctx.createLinearGradient(0,y-90,0,y+90);grd.addColorStop(0,`hsla(${hue},65%,65%,0)`);grd.addColorStop(.5,`hsla(${hue},65%,65%,0.20)`);grd.addColorStop(1,`hsla(${hue},65%,65%,0)`);ctx.fillStyle=grd;ctx.fillRect(0,y-90,canvas.width,180);}rafId=requestAnimationFrame(runAurora);}
+function setPat(p,el){pat=p;document.querySelectorAll('#pat-chips .chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');cancelAnimationFrame(rafId);parts=[];if(p==='aurora')runAurora();else{ctx&&(ctx.fillStyle='#151828',ctx.fillRect(0,0,canvas.width,canvas.height));runCanvas();}}
+
+/* ═══ BREATHING ═══ */
+const BPS={
+  '478':[{lbl:'Breathe IN 🌬️',dur:4,sc:1.5},{lbl:'Hold… ⏸️',dur:7,sc:1.5},{lbl:'Breathe OUT 😮‍💨',dur:8,sc:1}],
+  'box' :[{lbl:'Breathe IN 🌬️',dur:4,sc:1.5},{lbl:'Hold… ⏸️',dur:4,sc:1.5},{lbl:'Breathe OUT 😮‍💨',dur:4,sc:1},{lbl:'Hold… ⏸️',dur:4,sc:1}],
+  'easy':[{lbl:'Breathe IN 🌬️',dur:4,sc:1.5},{lbl:'Breathe OUT 😮‍💨',dur:6,sc:1}]
+};
+let bpKey='478',bPh=0,bCy=0,bTim=null;
+function setBP(k,el){bpKey=k;document.querySelectorAll('#bp-chips .chip').forEach(c=>c.classList.remove('on'));el.classList.add('on');resetBreath();}
+function resetBreath(){clearTimeout(bTim);bPh=0;bCy=0;const r=document.getElementById('breath-ring');if(r){r.style.transform='scale(1)';r.style.background='var(--primary-soft)';r.style.borderColor='var(--primary)';}const l=document.getElementById('breath-lbl');if(l)l.textContent='Ready?';const s=document.getElementById('breath-sub');if(s)s.textContent='Press start when you are ready';const f=document.getElementById('bfill');if(f){f.style.transition='none';f.style.width='0%';}const b=document.getElementById('br-btn');if(b){b.innerHTML='<span class="bi">▶️</span>Start breathing';b.onclick=startBreath;}}
+function startBreath(){const b=document.getElementById('br-btn');if(b){b.innerHTML='<span class="bi">⏹️</span>Stop';b.onclick=resetBreath;}doPhase();}
+function doPhase(){const pat2=BPS[bpKey],ph=pat2[bPh%pat2.length];const r=document.getElementById('breath-ring');const l=document.getElementById('breath-lbl');const s=document.getElementById('breath-sub');const f=document.getElementById('bfill');if(!r)return;l.textContent=ph.lbl;s.textContent=ph.dur+' seconds';r.style.transition='transform '+ph.dur+'s ease-in-out, background '+ph.dur+'s, border-color '+ph.dur+'s';r.style.transform='scale('+ph.sc+')';r.style.background=ph.sc>1?'var(--primary-soft)':'var(--green-soft)';r.style.borderColor=ph.sc>1?'var(--primary)':'var(--green)';f.style.transition='width '+ph.dur+'s linear';f.style.width='100%';bTim=setTimeout(()=>{f.style.transition='none';f.style.width='0%';bPh++;if(bPh%pat2.length===0){bCy++;if(bCy>=3){l.textContent='Amazing! 🌟';s.textContent='You did 3 full cycles!';r.style.transform='scale(1)';logBreathe();toast('3 breathing cycles done! 🌬️✨');const b2=document.getElementById('br-btn');if(b2){b2.innerHTML='<span class="bi">▶️</span>Again';b2.onclick=()=>{bCy=0;bPh=0;startBreath();};}return;}s.textContent='Cycle '+bCy+' done! 🌟';setTimeout(doPhase,900);}else setTimeout(doPhase,300);},ph.dur*1000);}
+
+/* ═══ GROUNDING ═══ */
+function checkGround(el){el.classList.toggle('done');el.querySelector('.gc').textContent=el.classList.contains('done')?'✅':'⬜';if(document.querySelectorAll('.gr.done').length>=3)toast('Great job noticing the world! 🌟');}
+
+/* ═══ RECOVERY ═══ */
+let recStep=0;
+function nextRec(){document.getElementById('rs-'+recStep).style.display='none';recStep++;const nxt=document.getElementById('rs-'+recStep);if(nxt)nxt.style.display='block';if(recStep===3){const b=document.getElementById('rec-btn');b.textContent='🏠 Go home';b.onclick=()=>{logRecover();goNav('home');resetRec();};}}
+function resetRec(){recStep=0;for(let i=0;i<4;i++){const e=document.getElementById('rs-'+i);if(e)e.style.display=i===0?'block':'none';}const b=document.getElementById('rec-btn');if(b){b.textContent='I am ready for the next step →';b.onclick=nextRec;}}
+
+/* ═══ TRACKING ═══ */
+function logCalm()   {S.usage.calm++;S.calmCount++;S.sessions++;checkStreak();addEvent('calm','Used Calm Now 🌊');save();refreshRec();}
+function logBreathe(){S.usage.breathe++;S.calmCount++;S.sessions++;checkStreak();addEvent('calm','Breathing done 🌬️');save();refreshRec();}
+function logPrevent(){S.usage.prevent++;S.sessions++;checkStreak();addEvent('warning','Used grounding 🛡️');save();refreshRec();}
+function logRecover(){S.usage.recover++;S.sessions++;checkStreak();addEvent('hard','Recovery completed 🫂');save();refreshRec();}
+function addEvent(type,text){const now=new Date();S.events.unshift({type,text,time:now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' '+now.toLocaleDateString([],{day:'numeric',month:'short'})});if(S.events.length>40)S.events.pop();}
+function rate(tool,stars,el){el.parentElement.querySelectorAll('.star').forEach((s,i)=>s.classList.toggle('on',i<stars));S.ratings[tool]=stars;save();toast(stars>=4?'So glad that helped! ⭐':'Thanks for letting us know!');}
+
+/* ═══ RECOMMENDATIONS ═══ */
+function refreshRec(){const sorted=Object.entries(S.usage).filter(([,v])=>v>0).sort(([,a],[,b])=>b-a).slice(0,2);const wrap=document.getElementById('rec-wrap');const list=document.getElementById('rec-list');if(!wrap||!list)return;if(!sorted.length){wrap.style.display='none';return;}wrap.style.display='block';const info={calm:{lbl:'Calm me NOW 🌊',cls:'blue',fn:"goNav('calm')"},breathe:{lbl:'Breathing 🌬️',cls:'green',fn:"goNav('breathe')"},prevent:{lbl:'I feel wobbly 🛡️',cls:'amber',fn:"show('s-prevent')"},recover:{lbl:'Rest and recover 🫂',cls:'rose',fn:"show('s-recover')"}};list.innerHTML=sorted.map(([k])=>{const t=info[k];return`<button class="big-btn ${t.cls}" onclick="${t.fn}" style="min-height:72px;font-size:17px">${t.lbl}</button>`;}).join('');}
+
+/* ═══ DASHBOARD ═══ */
+function refreshDash(){const total=S.sessions;const pct=total>0?Math.round(S.calmCount/total*100):0;document.getElementById('st-sess').textContent=total;document.getElementById('st-calm').textContent=pct+'%';document.getElementById('st-str').textContent=S.streak;const sorted=Object.entries(S.usage).sort(([,a],[,b])=>b-a);const labels={calm:'🌊 Calm Now',breathe:'🌬️ Breathe',prevent:'🛡️ Wobbly',recover:'🫂 Recovery'};const fav=sorted.find(([,v])=>v>0);document.getElementById('st-fav').textContent=fav?labels[fav[0]].split(' ')[0]:'—';const maxV=Math.max(...Object.values(S.usage),1);document.getElementById('tool-chart').innerHTML=sorted.map(([k,v])=>`<div class="br"><div class="bl">${labels[k]}</div><div class="bt"><div class="bf" style="width:${Math.round(v/maxV*100)}%"></div></div><div class="bv">${v}</div></div>`).join('');const log=document.getElementById('ev-log');if(S.events.length)log.innerHTML=S.events.slice(0,10).map(e=>`<div class="evrow"><div class="evd ${e.type}"></div><div class="evt">${e.text}</div><div class="evt2">${e.time}</div></div>`).join('');}
+function exportCSV(){const rows=[['Date','Event','Type'],...S.events.map(e=>[e.time,e.text,e.type]),[''],['Tool','Times used'],...Object.entries(S.usage).map(([k,v])=>[k,v]),[''],['Stat','Value'],['Total sessions',S.sessions],['Calm rate %',Math.round(S.calmCount/Math.max(S.sessions,1)*100)+'%'],['Day streak',S.streak],['Name',S.name]];const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(rows.map(r=>r.join(',')).join('\n'));a.download='calmly_report_'+S.name+'.csv';a.click();toast('Report downloaded! 📤');}
+
+/* ═══ TOAST ═══ */
+let tTimer;
+function toast(msg){const el=document.getElementById('toast');el.textContent=msg;el.classList.add('show');clearTimeout(tTimer);tTimer=setTimeout(()=>el.classList.remove('show'),2800);}
+
+/* ═══ RESET ═══ */
+function resetApp(){if(!confirm('This will delete all data. Are you sure?'))return;stopAll();localStorage.removeItem('calmly3');location.reload();}
+
+/* ═══ INIT ═══ */
+window.addEventListener('online', ()=>document.getElementById('offpill').style.display='none');
+window.addEventListener('offline',()=>document.getElementById('offpill').style.display='block');
+window.addEventListener('load',()=>{
+  const has=load();
+  if(has&&S.name&&S.name!=='friend'){
+    applyTheme();syncToggles();
+    document.getElementById('h-name').textContent=S.name;
+    document.getElementById('h-av').textContent=S.avatar;
+    document.getElementById('bnav').style.display='flex';
+    checkStreak();save();refreshRec();goNav('home');
+  } else show('s-welcome');
+});
+let lastTap=0;
+document.addEventListener('touchend',e=>{const now=Date.now();if(now-lastTap<350)e.preventDefault();lastTap=now;},{passive:false});
+</script>
+
+<footer style="
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  text-align:center;
+  font-size:12px;
+  font-weight:700;
+  color:var(--text-soft);
+  padding:6px 10px;
+  background:transparent;
+  z-index:50;
+">
+  © 2026 Sensory Calm. All rights reserved.
+</footer>
+
+</body>
+</html>
